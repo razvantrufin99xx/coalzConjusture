@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace coalzConjusture
 {
@@ -33,8 +34,9 @@ namespace coalzConjusture
 		
 		
 		public Graphics g;
-		public Pen p = new Pen(Color.Red,2);
-		public Font f;
+		public Pen p = new Pen(Color.Red,1);
+        public Pen ps = new Pen(Color.Silver, 1);
+        public Font f;
 		public Brush b = new SolidBrush(Color.Black);
 		
 		
@@ -48,6 +50,7 @@ namespace coalzConjusture
             {
             	counter++;
             	textBox1.Text += counter.ToString() + " : " + n.ToString() + "\r\n";
+                textBox1.Refresh();
                 if (n % 2 == 0)
                 {
                     n /= 2;
@@ -59,10 +62,35 @@ namespace coalzConjusture
                 cdate.Add(n);
             }
             textBox1.Text += "1";
+            textBox1.Refresh();
             cdate.Add(1);
        
 		}
-		void MainFormLoad(object sender, EventArgs e)
+        public void cc2(int n)
+        {
+
+            int counter = 0;
+            while (n != 1)
+            {
+                counter++;
+               // textBox1.Text += counter.ToString() + " : " + n.ToString() + "\r\n";
+                textBox1.Refresh();
+                if (n % 2 == 0)
+                {
+                    n /= 2;
+                }
+                else
+                {
+                    n = 3 * n + 1;
+                }
+                cdate.Add(n);
+            }
+           // textBox1.Text += "1";
+            textBox1.Refresh();
+            cdate.Add(1);
+
+        }
+        void MainFormLoad(object sender, EventArgs e)
 		{
 			g = this.CreateGraphics();
 			f = this.Font;
@@ -84,7 +112,42 @@ namespace coalzConjusture
 				}catch{};
 			}
 		}
-		void Button2Click(object sender, EventArgs e)
+        public void grafic2()
+        {
+            for (int i = 0; i < cdate.Count; i++)
+            {
+                try
+                {
+
+                    g.DrawLine(ps, 100 + (i * 5), cdate[i] + 50, 100 + (i * 5), cdate[i - 1] + 50);
+                    g.DrawEllipse(ps, 100 + (i * 5), cdate[i] + 50, 5, 5);
+                   // g.DrawString(cdate[i].ToString(), f, b, (i * 5) + 100, cdate[i] + 50 + 50);
+                }
+                catch { }
+                ;
+            }
+        }
+
+        public int zoom = 1000;
+        public void grafic3()
+        {
+            for (int i = 0; i < cdate.Count; i++)
+            {
+                try
+                {
+
+                   // g.DrawLine(p, (100 + (i * 5)) / 5, (cdate[i] + 50) / zoom, (100 + (i * 5)) / 5, (cdate[i - 1] + 50)/ zoom);
+                   // g.DrawEllipse(p, (100 + (i * 5)) / 5, (cdate[i] + 50) / 10, 1, 1);
+                   // Thread.Sleep(100);
+                   // g.DrawLine(ps, (100 + (i * 5)) / 5, (cdate[i] + 50) / zoom, (100 + (i * 5)) / 5, (cdate[i - 1] + 50) / zoom);
+                    g.DrawEllipse(ps, (100 + (i * 5)) / 5, (cdate[i] + 50) / 10, 1, 1);
+                    // g.DrawString(cdate[i].ToString(), f, b, (i * 5) + 100, cdate[i] + 50 + 50);
+                }
+                catch { }
+                ;
+            }
+        }
+        void Button2Click(object sender, EventArgs e)
 		{
 			grafic();
 		}
@@ -93,7 +156,43 @@ namespace coalzConjusture
 			cdate.Clear();
 			g.Clear(this.BackColor);
 		}
-	}
+
+		private void button4_Click(object sender, EventArgs e)
+		{
+			for (int i = 2; i < 2300; i++)
+			{
+                //cc(i);
+                cc2(i);
+                //grafic2();
+                grafic3();
+                
+                cdate.Clear();
+				
+            }
+
+		}
+
+		public bool showhide = true;
+		public bool shf()
+		{ 
+			if(showhide==true)
+			{
+				textBox1.Visible = false;
+				showhide = false;
+				return showhide;
+			}
+			else
+			{
+                textBox1.Visible = true;
+                showhide = true;
+				return showhide;
+            }
+        }
+        private void button5_Click(object sender, EventArgs e)
+        {
+			shf();
+        }
+    }
 }
 
 
